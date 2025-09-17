@@ -12,11 +12,14 @@ add_executable(LittleGameEngine main.cpp
         lve_window.h
         lve_window.cpp
         first_app.cpp
+        lve_pipeline.h
+        lve_pipeline.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE
         ${Vulkan_INCLUDE_DIRS}
         ${GLFW_INCLUDE_DIR}
+        shaders
 )
 
 target_link_libraries(LittleGameEngine PRIVATE
