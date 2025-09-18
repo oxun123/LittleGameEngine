@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "first_app.h"
 
 int main() {

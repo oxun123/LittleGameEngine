@@ -14,6 +14,8 @@ add_executable(LittleGameEngine main.cpp
         first_app.cpp
         lve_pipeline.h
         lve_pipeline.cpp
+        lve_device.h
+        lve_device.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE
