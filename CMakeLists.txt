@@ -16,6 +16,8 @@ add_executable(LittleGameEngine main.cpp
         lve_pipeline.cpp
         lve_device.h
         lve_device.cpp
+        lve_swap_chain.h
+        lve_swap_chain.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE

@@ -42,16 +42,15 @@ namespace lve {
         const std::string &vertFilepath,
         const std::string &fragFilepath,
         const PipelineConfigInfo &configInfo) {
-        assert(configInfo.pipelineLayout != VK_NULL_HANDLE &&
+        assert(
+            configInfo.pipelineLayout != VK_NULL_HANDLE &&
             "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
-        assert(configInfo.renderPass != VK_NULL_HANDLE &&
+        assert(
+            configInfo.renderPass != VK_NULL_HANDLE &&
             "Cannot create graphics pipeline: no renderPass provided in configInfo");
 
-        const auto vertCode = readFile(vertFilepath);
-        const auto fragCode = readFile(fragFilepath);
-
-        std::cout << "Vertex Shader Code size: " << vertCode.size() << " bytes" << std::endl;
-        std::cout << "Fragment Shader Code size: " << fragCode.size() << " bytes" << std::endl;
+        auto vertCode = readFile(vertFilepath);
+        auto fragCode = readFile(fragFilepath);
 
         createShaderModule(vertCode, &vertShaderModule);
         createShaderModule(fragCode, &fragShaderModule);
@@ -73,10 +72,18 @@ namespace lve {
         shaderStages[1].pSpecializationInfo = nullptr;
 
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
-        vertexInputInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexAttributeDescriptionCount = 0;
+        vertexInputInfo.vertexBindingDescriptionCount = 0;
         vertexInputInfo.pVertexAttributeDescriptions = nullptr;
         vertexInputInfo.pVertexBindingDescriptions = nullptr;
+
+        VkPipelineViewportStateCreateInfo viewportInfo{};
+        viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        viewportInfo.viewportCount = 1;
+        viewportInfo.pViewports = &configInfo.viewport;
+        viewportInfo.scissorCount = 1;
+        viewportInfo.pScissors = &configInfo.scissor;
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -84,7 +91,8 @@ namespace lve {
         pipelineInfo.pStages = shaderStages;
         pipelineInfo.pVertexInputState = &vertexInputInfo;
         pipelineInfo.pInputAssemblyState = &configInfo.inputAssemblyInfo;
-        pipelineInfo.pViewportState = &configInfo.viewportInfo;
+        pipelineInfo.pViewportState = &viewportInfo;
+        pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
         pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
         pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
         pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
@@ -98,13 +106,12 @@ namespace lve {
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         if (vkCreateGraphicsPipelines(
-            lveDevice.device(),
-            VK_NULL_HANDLE,
-            1,
-            &pipelineInfo,
-            nullptr,
-            &graphicsPipeline
-        ) != VK_SUCCESS) {
+                lveDevice.device(),
+                VK_NULL_HANDLE,
+                1,
+                &pipelineInfo,
+                nullptr,
+                &graphicsPipeline) != VK_SUCCESS) {
             throw std::runtime_error("failed to create graphics pipeline");
         }
     }
@@ -114,11 +121,15 @@ namespace lve {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
         createInfo.codeSize = code.size();
-        createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+        createInfo.pCode = reinterpret_cast<const uint32_t *>(code.data());
 
         if (vkCreateShaderModule(lveDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) {
             throw std::runtime_error("failed to create shader module");
         }
+    }
+
+    void LvePipeline::bind(VkCommandBuffer commandBuffer) {
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
     }
 
     PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height) {
@@ -136,12 +147,6 @@ namespace lve {
 
         configInfo.scissor.offset = {0, 0};
         configInfo.scissor.extent = {width, height};
-
-        configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-        configInfo.viewportInfo.viewportCount = 1;
-        configInfo.viewportInfo.pViewports = &configInfo.viewport;
-        configInfo.viewportInfo.scissorCount = 1;
-        configInfo.viewportInfo.pScissors = &configInfo.scissor;
 
         configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         configInfo.rasterizationInfo.depthClampEnable = VK_FALSE;
@@ -163,7 +168,8 @@ namespace lve {
         configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;
 
         configInfo.colorBlendAttachment.colorWriteMask =
-            VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+                VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+                VK_COLOR_COMPONENT_A_BIT;
         configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
         configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
         configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -174,26 +180,25 @@ namespace lve {
 
         configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
-        configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY;  // Optional
+        configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Optional
         configInfo.colorBlendInfo.attachmentCount = 1;
         configInfo.colorBlendInfo.pAttachments = &configInfo.colorBlendAttachment;
-        configInfo.colorBlendInfo.blendConstants[0] = 0.0f;  // Optional
-        configInfo.colorBlendInfo.blendConstants[1] = 0.0f;  // Optional
-        configInfo.colorBlendInfo.blendConstants[2] = 0.0f;  // Optional
-        configInfo.colorBlendInfo.blendConstants[3] = 0.0f;  // Optional
+        configInfo.colorBlendInfo.blendConstants[0] = 0.0f; // Optional
+        configInfo.colorBlendInfo.blendConstants[1] = 0.0f; // Optional
+        configInfo.colorBlendInfo.blendConstants[2] = 0.0f; // Optional
+        configInfo.colorBlendInfo.blendConstants[3] = 0.0f; // Optional
 
         configInfo.depthStencilInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
         configInfo.depthStencilInfo.depthTestEnable = VK_TRUE;
         configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
         configInfo.depthStencilInfo.depthCompareOp = VK_COMPARE_OP_LESS;
         configInfo.depthStencilInfo.depthBoundsTestEnable = VK_FALSE;
-        configInfo.depthStencilInfo.minDepthBounds = 0.0f;  // Optional
-        configInfo.depthStencilInfo.maxDepthBounds = 1.0f;  // Optional
+        configInfo.depthStencilInfo.minDepthBounds = 0.0f; // Optional
+        configInfo.depthStencilInfo.maxDepthBounds = 1.0f; // Optional
         configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
-        configInfo.depthStencilInfo.front = {};  // Optional
-        configInfo.depthStencilInfo.back = {};   // Optional
+        configInfo.depthStencilInfo.front = {}; // Optional
+        configInfo.depthStencilInfo.back = {}; // Optional
 
         return configInfo;
     }
-
 }
