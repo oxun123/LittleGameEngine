@@ -17,7 +17,7 @@ namespace lve {
         LveDevice lveDevice{lveWindow};
         LvePipeline lvePipeline{
             lveDevice,
-            "D:/LittleGameEngine/shaders/simple_shader.frag",
+            "D:/LittleGameEngine/shaders/simple_vert.spv",
             "D:/LittleGameEngine/shaders/simple_frag.spv",
             LvePipeline::defaultPipelineConfigInfo(WIDTH, HEIGHT)
         };
