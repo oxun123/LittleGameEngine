@@ -29,14 +29,11 @@ namespace lve {
 #endif
 
         LveDevice(LveWindow &window);
-
         ~LveDevice();
 
         // Not copyable or movable
         LveDevice(const LveDevice &) = delete;
-
-        void operator=(const LveDevice &) = delete;
-
+        LveDevice &operator=(const LveDevice &) = delete;
         LveDevice(LveDevice &&) = delete;
 
         LveDevice &operator=(LveDevice &&) = delete;
@@ -83,32 +80,20 @@ namespace lve {
 
     private:
         void createInstance();
-
         void setupDebugMessenger();
-
         void createSurface();
-
         void pickPhysicalDevice();
-
         void createLogicalDevice();
-
         void createCommandPool();
 
         // helper functions
         bool isDeviceSuitable(VkPhysicalDevice device);
-
         std::vector<const char *> getRequiredExtensions();
-
         bool checkValidationLayerSupport();
-
         QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-
         void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT &createInfo);
-
         void hasGflwRequiredInstanceExtensions();
-
         bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-
         SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 
         VkInstance instance;
