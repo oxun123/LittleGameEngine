@@ -35,12 +35,29 @@ namespace lve {
         vkDeviceWaitIdle(lveDevice.device());
     }
 
+    void FirstApp::sierpinski(
+    std::vector<LveModel::Vertex> &vertices,
+    int depth,
+    glm::vec2 left,
+    glm::vec2 right,
+    glm::vec2 top) {
+        if (depth <= 0) {
+            vertices.push_back({top});
+            vertices.push_back({right});
+            vertices.push_back({left});
+        } else {
+            auto leftTop = 0.5f * (left + top);
+            auto rightTop = 0.5f * (right + top);
+            auto leftRight = 0.5f * (left + right);
+            sierpinski(vertices, depth - 1, left, leftRight, leftTop);
+            sierpinski(vertices, depth - 1, leftRight, right, rightTop);
+            sierpinski(vertices, depth - 1, leftTop, rightTop, top);
+        }
+    }
+
     void FirstApp::loadGameObjects() {
-        std::vector<LveModel::Vertex> vertices{
-            {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
-        };
+        std::vector<LveModel::Vertex> vertices{};
+        sierpinski(vertices, 5, {-0.5f, 0.5f}, {0.5f, 0.5f}, {0.0f, -0.5f});
         auto lveModel = std::make_shared<LveModel>(lveDevice, vertices);
         std::vector<glm::vec3> colors{
             {1.f, .7f, .73f},

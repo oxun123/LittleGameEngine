@@ -13,8 +13,8 @@
 namespace lve {
     class FirstApp {
     public:
-        static constexpr int HEIGHT = 600;
-        static constexpr int WIDTH = 800;
+        static constexpr int HEIGHT = 1000;
+        static constexpr int WIDTH = 1000;
 
         FirstApp();
         ~FirstApp();
@@ -25,6 +25,13 @@ namespace lve {
         void run();
 
     private:
+        void sierpinski(
+            std::vector<LveModel::Vertex> &vertices,
+            int depth,
+            glm::vec2 left,
+            glm::vec2 right,
+            glm::vec2 top);
+
         void loadGameObjects();
         void createPipelineLayout();
         void createPipeline();
