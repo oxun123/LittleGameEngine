@@ -21,6 +21,10 @@ add_executable(LittleGameEngine main.cpp
         lve_model.h
         lve_model.cpp
         lve_game_object.h
+        lve_renderer.h
+        lve_renderer.cpp
+        simple_render_system.h
+        simple_render_system.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE
