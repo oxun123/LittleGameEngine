@@ -20,6 +20,7 @@ add_executable(LittleGameEngine main.cpp
         lve_swap_chain.cpp
         lve_model.h
         lve_model.cpp
+        lve_game_object.h
 )
 
 target_include_directories(LittleGameEngine PRIVATE
