@@ -7,11 +7,10 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
+#include "lve_rainbow_system.h"
 
 // std
 #include <array>
-#include <cassert>
-#include <stdexcept>
 
 namespace lve {
 
@@ -20,6 +19,7 @@ namespace lve {
     FirstApp::~FirstApp() {}
 
     void FirstApp::run() {
+        RainbowSystem rainbowSystem{.5f};
         SimpleRenderSystem simpleRenderSystem{lveDevice, lveRenderer.getSwapChainRenderPass()};
 
         while (!lveWindow.shouldClose()) {
@@ -28,6 +28,7 @@ namespace lve {
             if (auto commandBuffer = lveRenderer.beginFrame()) {
                 lveRenderer.beginSwapChainRenderPass(commandBuffer);
                 simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects);
+                rainbowSystem.update(1.f / 60.f, gameObjects);
                 lveRenderer.endSwapChainRenderPass(commandBuffer);
                 lveRenderer.endFrame();
             }
