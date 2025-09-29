@@ -25,6 +25,7 @@ add_executable(LittleGameEngine main.cpp
         lve_renderer.cpp
         simple_render_system.h
         simple_render_system.cpp
+        lve_gravity_system.h
 )
 
 target_include_directories(LittleGameEngine PRIVATE
