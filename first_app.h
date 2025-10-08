@@ -12,8 +12,8 @@
 namespace lve {
     class FirstApp {
     public:
-        static constexpr int HEIGHT = 600;
-        static constexpr int WIDTH = 800;
+        static constexpr int HEIGHT = 1200;
+        static constexpr int WIDTH = 1600;
 
         FirstApp();
         ~FirstApp();
