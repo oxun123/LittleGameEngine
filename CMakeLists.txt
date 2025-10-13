@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 4.0)
 project(LittleGameEngine)
 
 set(CMAKE_CXX_STANDARD 17)
-set(GLFW_INCLUDE_DIR "D:/vulkan_example/glfw-3.4.bin.WIN64/include")
-set(GLFW_LIBRARY "D:/vulkan_example/glfw-3.4.bin.WIN64/lib-mingw-w64/libglfw3.a")
+set(GLFW_INCLUDE_DIR "D:/LittleGameEngine/glfw-3.4/include")
+set(GLFW_LIBRARY "D:/LittleGameEngine/glfw-3.4/lib-mingw-w64/libglfw3.a")
 
 find_package(Vulkan REQUIRED)
 
