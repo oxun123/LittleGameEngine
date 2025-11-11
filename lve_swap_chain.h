@@ -14,6 +14,7 @@ namespace lve {
         static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
         LveSwapChain(LveDevice &deviceRef, VkExtent2D windowExtent);
+
         LveSwapChain(LveDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<LveSwapChain> previous);
 
         ~LveSwapChain();
@@ -36,21 +37,29 @@ namespace lve {
         }
 
         VkFormat findDepthFormat();
+
         VkResult acquireNextImage(uint32_t *imageIndex);
+
         VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
         bool compareSwapFormats(const LveSwapChain &swapChain) const {
             return swapChain.swapChainDepthFormat == swapChainDepthFormat &&
-                    swapChain.swapChainImageFormat == swapChainImageFormat;
+                   swapChain.swapChainImageFormat == swapChainImageFormat;
         }
 
     private:
         void init();
+
         void createSwapChain();
+
         void createImageViews();
+
         void createDepthResources();
+
         void createRenderPass();
+
         void createFramebuffers();
+
         void createSyncObjects();
 
         // Helper functions

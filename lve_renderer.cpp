@@ -55,7 +55,7 @@ namespace lve {
             lveDevice.device(),
             lveDevice.getCommandPool(),
             static_cast<uint32_t>(commandBuffers.size()),
-             commandBuffers.data());
+            commandBuffers.data());
         commandBuffers.clear();
     }
 
@@ -107,7 +107,7 @@ namespace lve {
     void LveRenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer) {
         assert(isFrameStarted && "Can't call beginSwapChainRenderPass if frame is not in progress");
         assert(commandBuffer == getCurrentCommandBuffer() &&
-            "Can't begin render pass on command buffer from a different frame");
+               "Can't begin render pass on command buffer from a different frame");
 
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;

@@ -16,9 +16,11 @@ namespace lve {
         static constexpr int WIDTH = 1600;
 
         FirstApp();
+
         ~FirstApp();
 
         FirstApp(const FirstApp &) = delete;
+
         FirstApp &operator=(const FirstApp &) = delete;
 
         void run();

@@ -52,8 +52,11 @@ namespace lve {
         }
 
         LveGameObject(const LveGameObject &) = delete;
+
         LveGameObject &operator=(const LveGameObject &) = delete;
+
         LveGameObject(LveGameObject &&) = default;
+
         LveGameObject &operator=(LveGameObject &&) = default;
 
         id_t getId() { return id; }
@@ -63,7 +66,8 @@ namespace lve {
         TransformComponent transform{};
 
     private:
-        LveGameObject(id_t objId): id{objId} {}
+        LveGameObject(id_t objId) : id{objId} {
+        }
 
         id_t id;
     };

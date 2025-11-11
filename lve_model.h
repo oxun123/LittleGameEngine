@@ -17,6 +17,7 @@ namespace lve {
             glm::vec3 color;
 
             static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
+
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
         };
 
@@ -26,16 +27,20 @@ namespace lve {
         };
 
         LveModel(LveDevice &device, const Builder &builder);
+
         ~LveModel();
 
         LveModel(const LveModel &) = delete;
+
         LveModel &operator=(const LveModel &) = delete;
 
         void bind(VkCommandBuffer commandBuffer);
+
         void draw(VkCommandBuffer commandBuffer);
 
     private:
         void createVertexBuffers(const std::vector<Vertex> &vertices);
+
         void createIndexBuffer(const std::vector<uint32_t> &indices);
 
         LveDevice &lveDevice;

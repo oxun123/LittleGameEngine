@@ -2,8 +2,8 @@
 #include <stdexcept>
 
 namespace lve {
-    LveWindow::LveWindow(int w, int h, std::string name): width {w}, height{h},
-    windowName{name} {
+    LveWindow::LveWindow(int w, int h, std::string name) : width{w}, height{h},
+                                                           windowName{name} {
         initWindow();
     }
 
@@ -28,8 +28,8 @@ namespace lve {
         }
     }
 
-    void LveWindow::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-        const auto lveWindow = static_cast<LveWindow*>(glfwGetWindowUserPointer(window));
+    void LveWindow::framebufferResizeCallback(GLFWwindow *window, int width, int height) {
+        const auto lveWindow = static_cast<LveWindow *>(glfwGetWindowUserPointer(window));
         lveWindow->framebufferResized = true;
         lveWindow->width = width;
         lveWindow->height = height;

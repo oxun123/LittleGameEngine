@@ -14,10 +14,12 @@ namespace lve {
     class SimpleRenderSystem {
     public:
         SimpleRenderSystem(LveDevice &device, VkRenderPass renderPass);
+
         ~SimpleRenderSystem();
 
-        SimpleRenderSystem(const SimpleRenderSystem&) = delete;
-        SimpleRenderSystem &operator=(const SimpleRenderSystem&) = delete;
+        SimpleRenderSystem(const SimpleRenderSystem &) = delete;
+
+        SimpleRenderSystem &operator=(const SimpleRenderSystem &) = delete;
 
         void renderGameObjects(
             VkCommandBuffer commandBuffer,
@@ -26,6 +28,7 @@ namespace lve {
 
     private:
         void createPipelineLayout();
+
         void createPipeline(VkRenderPass renderPass);
 
         LveDevice &lveDevice;
