@@ -29,6 +29,8 @@ add_executable(LittleGameEngine main.cpp
         lve_camera.cpp
         keyboard_movement_controller.h
         keyboard_movement_controller.cpp
+        tiny_obj_loader.h
+        lve_utils.h
 )
 
 target_include_directories(LittleGameEngine PRIVATE
