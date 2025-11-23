@@ -14,8 +14,9 @@
 #include <stdexcept>
 
 namespace std {
-    template<> struct hash<lve::LveModel::Vertex> {
-        size_t operator()(lve::LveModel::Vertex const& vertex) const {
+    template<>
+    struct hash<lve::LveModel::Vertex> {
+        size_t operator()(lve::LveModel::Vertex const &vertex) const {
             size_t seed = 0;
             lve::hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.uv);
             return seed;
@@ -24,8 +25,7 @@ namespace std {
 }
 
 namespace lve {
-
-    LveModel::LveModel(LveDevice& device, const LveModel::Builder& builder) : lveDevice{ device } {
+    LveModel::LveModel(LveDevice &device, const LveModel::Builder &builder) : lveDevice{device} {
         createVertexBuffers(builder.vertices);
         createIndexBuffers(builder.indices);
     }
@@ -41,13 +41,13 @@ namespace lve {
     }
 
     std::unique_ptr<LveModel> LveModel::createModelFromFile(
-        LveDevice& device, const std::string& filepath) {
+        LveDevice &device, const std::string &filepath) {
         Builder builder{};
         builder.loadModel(filepath);
         return std::make_unique<LveModel>(device, builder);
     }
 
-    void LveModel::createVertexBuffers(const std::vector<Vertex>& vertices) {
+    void LveModel::createVertexBuffers(const std::vector<Vertex> &vertices) {
         vertexCount = static_cast<uint32_t>(vertices.size());
         assert(vertexCount >= 3 && "Vertex count must be at least 3");
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertexCount;
@@ -61,7 +61,7 @@ namespace lve {
             stagingBuffer,
             stagingBufferMemory);
 
-        void* data;
+        void *data;
         vkMapMemory(lveDevice.device(), stagingBufferMemory, 0, bufferSize, 0, &data);
         memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
         vkUnmapMemory(lveDevice.device(), stagingBufferMemory);
@@ -79,7 +79,7 @@ namespace lve {
         vkFreeMemory(lveDevice.device(), stagingBufferMemory, nullptr);
     }
 
-    void LveModel::createIndexBuffers(const std::vector<uint32_t>& indices) {
+    void LveModel::createIndexBuffers(const std::vector<uint32_t> &indices) {
         indexCount = static_cast<uint32_t>(indices.size());
         hasIndexBuffer = indexCount > 0;
 
@@ -98,7 +98,7 @@ namespace lve {
             stagingBuffer,
             stagingBufferMemory);
 
-        void* data;
+        void *data;
         vkMapMemory(lveDevice.device(), stagingBufferMemory, 0, bufferSize, 0, &data);
         memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
         vkUnmapMemory(lveDevice.device(), stagingBufferMemory);
@@ -119,15 +119,14 @@ namespace lve {
     void LveModel::draw(VkCommandBuffer commandBuffer) {
         if (hasIndexBuffer) {
             vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
-        }
-        else {
+        } else {
             vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
         }
     }
 
     void LveModel::bind(VkCommandBuffer commandBuffer) {
-        VkBuffer buffers[] = { vertexBuffer };
-        VkDeviceSize offsets[] = { 0 };
+        VkBuffer buffers[] = {vertexBuffer};
+        VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
 
         if (hasIndexBuffer) {
@@ -144,20 +143,15 @@ namespace lve {
     }
 
     std::vector<VkVertexInputAttributeDescription> LveModel::Vertex::getAttributeDescriptions() {
-        std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(Vertex, position);
-
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
+        attributeDescriptions.push_back({0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)});
+        attributeDescriptions.push_back({1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)});
+        attributeDescriptions.push_back({2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)});
+        attributeDescriptions.push_back({3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)});
         return attributeDescriptions;
     }
 
-    void LveModel::Builder::loadModel(const std::string& filepath) {
+    void LveModel::Builder::loadModel(const std::string &filepath) {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
@@ -171,8 +165,8 @@ namespace lve {
         indices.clear();
 
         std::unordered_map<Vertex, uint32_t> uniqueVertices{};
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
+        for (const auto &shape: shapes) {
+            for (const auto &index: shape.mesh.indices) {
                 Vertex vertex{};
 
                 if (index.vertex_index >= 0) {
@@ -182,17 +176,11 @@ namespace lve {
                         attrib.vertices[3 * index.vertex_index + 2],
                     };
 
-                    auto colorIndex = 3 * index.vertex_index + 2;
-                    if (colorIndex < attrib.colors.size()) {
-                        vertex.color = {
-                            attrib.colors[colorIndex - 2],
-                            attrib.colors[colorIndex - 1],
-                            attrib.colors[colorIndex - 0],
-                        };
-                    }
-                    else {
-                        vertex.color = { 1.f, 1.f, 1.f };  // set default color
-                    }
+                    vertex.color = {
+                        attrib.colors[3 * index.vertex_index + 0],
+                        attrib.colors[3 * index.vertex_index + 1],
+                        attrib.colors[3 * index.vertex_index + 2],
+                    };
                 }
 
                 if (index.normal_index >= 0) {
@@ -218,6 +206,4 @@ namespace lve {
             }
         }
     }
-
-
-}  // namespace lve
+} // namespace lve

@@ -35,6 +35,7 @@ add_executable(LittleGameEngine
         keyboard_movement_controller.cpp
         tiny_obj_loader.h
         lve_utils.h
+        lve_game_object.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE
