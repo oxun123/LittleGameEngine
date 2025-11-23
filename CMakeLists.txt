@@ -1,13 +1,17 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.28)
 project(LittleGameEngine)
 
 set(CMAKE_CXX_STANDARD 17)
-set(GLFW_INCLUDE_DIR "D:/LittleGameEngine/glfw-3.4/include")
-set(GLFW_LIBRARY "D:/LittleGameEngine/glfw-3.4/lib-mingw-w64/libglfw3.a")
+
+set(GLFW_INCLUDE_DIR "~/Documents/PERSONAL/glfw-3.4.bin.MACOS/include")
+set(GLFW_LIBRARY "$ENV{HOME}/Documents/PERSONAL/glfw-3.4.bin.MACOS/lib-arm64/libglfw3.a")
+
+find_package(glm REQUIRED)
 
 find_package(Vulkan REQUIRED)
 
-add_executable(LittleGameEngine main.cpp
+add_executable(LittleGameEngine
+        main.cpp
         first_app.h
         lve_window.h
         lve_window.cpp
@@ -40,10 +44,11 @@ target_include_directories(LittleGameEngine PRIVATE
 )
 
 target_link_libraries(LittleGameEngine PRIVATE
-        ${Vulkan_LIBRARIES}
         ${GLFW_LIBRARY}
-        opengl32
-        gdi32
-        user32
-        shell32
+        ${Vulkan_LIBRARIES}
+        Vulkan::Vulkan
+        glm::glm
+        "-framework Cocoa"
+        "-framework IOKit"
+        "-framework CoreVideo"
 )

@@ -54,7 +54,7 @@ namespace lve {
 
 
     void FirstApp::loadGameObjects() {
-        std::shared_ptr<LveModel> lveModel = LveModel::createModelFromFile(lveDevice, "D://LittleGameEngine/models/flat_vase.obj");
+        std::shared_ptr<LveModel> lveModel = LveModel::createModelFromFile(lveDevice, "/Users/ferro/Documents/PERSONAL/LittleGameEngine/models/flat_vase.obj");
         auto gameObj = LveGameObject::createGameObject();
         gameObj.model = lveModel;
         gameObj.transform.translation = {0.f, 0.f, 2.5f};
