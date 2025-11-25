@@ -36,6 +36,11 @@ add_executable(LittleGameEngine
         tiny_obj_loader.h
         lve_utils.h
         lve_game_object.cpp
+        lve_buffer.h
+        lve_frame_info.h
+        lve_buffer.cpp
+        lve_descriptors.cpp
+        lve_descriptors.h
 )
 
 target_include_directories(LittleGameEngine PRIVATE
