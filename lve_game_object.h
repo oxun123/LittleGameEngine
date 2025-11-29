@@ -4,6 +4,7 @@
 #include "lve_model.h"
 
 #include <memory>
+#include <unordered_map>
 
 namespace lve {
     struct TransformComponent {
@@ -18,6 +19,7 @@ namespace lve {
     class LveGameObject {
     public:
         using id_t = unsigned int;
+        using Map = std::unordered_map<id_t, LveGameObject>;
 
         static LveGameObject createGameObject() {
             static id_t currentId = 0;

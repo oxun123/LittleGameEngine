@@ -2,6 +2,7 @@
 #define LVE_FRAMEINFO_H
 
 #include "lve_camera.h"
+#include "lve_game_object.h"
 #include <vulkan/vulkan.h>
 
 namespace lve {
@@ -11,6 +12,7 @@ namespace lve {
         VkCommandBuffer commandBuffer;
         LveCamera &camera;
         VkDescriptorSet globalDescriptorSet;
+        LveGameObject::Map &gameObjects;
     };
 }
 
