@@ -27,8 +27,8 @@ add_executable(LittleGameEngine
         lve_game_object.h
         lve_renderer.h
         lve_renderer.cpp
-        simple_render_system.h
-        simple_render_system.cpp
+        systems/simple_render_system.h
+        systems/simple_render_system.cpp
         lve_camera.h
         lve_camera.cpp
         keyboard_movement_controller.h
@@ -41,12 +41,15 @@ add_executable(LittleGameEngine
         lve_buffer.cpp
         lve_descriptors.cpp
         lve_descriptors.h
+        systems/point_light_system.h
+        systems/point_light_system.cpp
 )
 
 target_include_directories(LittleGameEngine PRIVATE
         ${Vulkan_INCLUDE_DIRS}
         ${GLFW_INCLUDE_DIR}
         shaders
+        systems
 )
 
 target_link_libraries(LittleGameEngine PRIVATE

@@ -1,11 +1,11 @@
 #ifndef RENDER_SYSTEM_H
 #define RENDER_SYSTEM_H
 
-#include "lve_camera.h"
-#include "lve_device.h"
-#include "lve_frame_info.h"
-#include "lve_game_object.h"
-#include "lve_pipeline.h"
+#include "../lve_camera.h"
+#include "../lve_device.h"
+#include "../lve_frame_info.h"
+#include "../lve_game_object.h"
+#include "../lve_pipeline.h"
 
 // std
 #include <memory>
