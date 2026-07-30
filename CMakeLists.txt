@@ -3,11 +3,10 @@ project(LittleGameEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(GLFW_INCLUDE_DIR "~/Documents/PERSONAL/glfw-3.4.bin.MACOS/include")
+set(GLFW_INCLUDE_DIR "$ENV{HOME}/Documents/PERSONAL/glfw-3.4.bin.MACOS/include")
 set(GLFW_LIBRARY "$ENV{HOME}/Documents/PERSONAL/glfw-3.4.bin.MACOS/lib-arm64/libglfw3.a")
 
 find_package(glm REQUIRED)
-
 find_package(Vulkan REQUIRED)
 
 add_executable(LittleGameEngine

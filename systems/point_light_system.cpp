@@ -62,8 +62,8 @@ namespace lve {
         pipelineConfig.pipelineLayout = pipelineLayout;
         lvePipeline = std::make_unique<LvePipeline>(
             lveDevice,
-            "/Users/Ferro/Documents/PERSONAL/LittleGameEngine/shaders/point_light_vert.spv",
-            "/Users/Ferro/Documents/PERSONAL/LittleGameEngine/shaders/point_light_frag.spv",
+            "/Users/oxunjonsaidov/Documents/PERSONAL/LittleGameEngine/shaders/point_light_vert.spv",
+            "/Users/oxunjonsaidov/Documents/PERSONAL/LittleGameEngine/shaders/point_light_frag.spv",
             pipelineConfig);
     }
 

@@ -123,7 +123,7 @@ namespace lve {
     void FirstApp::loadGameObjects() {
         std::shared_ptr<LveModel> lveModel =
                 LveModel::createModelFromFile(
-                    lveDevice, "/Users/ferro/Documents/PERSONAL/LittleGameEngine/models/flat_vase.obj");
+                    lveDevice, "/Users/oxunjonsaidov/Documents/PERSONAL/LittleGameEngine/models/flat_vase.obj");
         auto flatVase = LveGameObject::createGameObject();
         flatVase.model = lveModel;
         flatVase.transform.translation = {-.5f, .5f, 0.f};
@@ -131,7 +131,7 @@ namespace lve {
         gameObjects.emplace(flatVase.getId(), std::move(flatVase));
 
         lveModel = LveModel::createModelFromFile(lveDevice,
-                                                 "/Users/ferro/Documents/PERSONAL/LittleGameEngine/models/smooth_vase.obj");
+                                                 "/Users/oxunjonsaidov/Documents/PERSONAL/LittleGameEngine/models/flat_vase.obj");
         auto smoothVase = LveGameObject::createGameObject();
         smoothVase.model = lveModel;
         smoothVase.transform.translation = {.5f, .5f, 0.f};
@@ -139,7 +139,7 @@ namespace lve {
         gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
 
         lveModel = LveModel::createModelFromFile(lveDevice,
-                                                 "/Users/ferro/Documents/PERSONAL/LittleGameEngine/models/quad.obj");
+                                                 "/Users/oxunjonsaidov/Documents/PERSONAL/LittleGameEngine/models/quad.obj");
         auto floor = LveGameObject::createGameObject();
         floor.model = lveModel;
         floor.transform.translation = {0.f, .5f, 0.f};
